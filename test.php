@@ -19,7 +19,7 @@ $vm->define("print", function ($args, $vm) {
         if (is_string($v) || method_exists($v, "__toString")) {
             print($v);
         } else {
-            var_dump($v);
+            echo json_encode($v);
         }
     }
 });

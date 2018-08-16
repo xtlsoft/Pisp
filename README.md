@@ -190,3 +190,45 @@ Then, you can just use:
 ```
 
 And this won't be executed.
+
+#### Literals
+
+Pisp now support many literals.
+
+Literals are surrounded by `[` and `]`.
+
+There are currently three types of literals: numeric, string and list.
+
+##### Numeric
+
+Numeric is an integer or float.
+
+Example:
+
+```lisp
+(print [123] [123.456] [1e10] [0x3f3f3f3f])
+```
+
+##### String
+
+Strings are surrounded by quotes. Supports muiltiple quotes.
+
+`\n` or other things are not supported at the moment.
+
+Example:
+
+```lisp
+(print ["Hello World"] ['Another 'test' Hello World'])
+```
+
+##### List
+
+List is a collection of values.
+
+It starts with `:`, each value is separated with a `,`.
+
+Example:
+
+```lisp
+(print [: 1, 2, 3] [: "Hello", 234, "World", 'you'])
+```
