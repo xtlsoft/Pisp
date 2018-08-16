@@ -60,7 +60,7 @@ class VM {
                     $args[] = $this->runNode($child);
                 }
             }
-            $this->doFunction($name, $args);
+            return $this->doFunction($name, $args);
         } else if ($node instanceof Root) {
             return $this->runNode($node->children[0]);
         } else {

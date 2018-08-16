@@ -32,7 +32,7 @@ class Parser {
      */
     protected function cleanCode(string $code): string {
         $code = trim($code);
-        return preg_replace("/([\s]+)/", " ", $code);
+        return preg_replace("/^\[([\s]+)/", " ", $code);
     }
 
     /**
@@ -42,6 +42,7 @@ class Parser {
      * @return \Pisp\Parser\AST\Root
      */
     public function parse(string $code): Root {
+        $code = $this->parseComment($code);
         $root = new Root;
         $this->doParse($code, $root);
         return $root;
@@ -65,6 +66,8 @@ class Parser {
             $this->doParseCalling(str_split(substr($code, 1, -1)), $parentNode);
         } else if (substr($code, 0, 1) == '[' && substr($code, -1, 1) == ']') {
             $this->doParseLiteral(str_split(substr($code, 1, -1)), $parentNode);
+        } else if (str_replace([' ', ')', '(', '[', ']', ';'], ['', '', '', '', '', ''], $code) == $code) {
+            $this->doParseCalling(str_split($code), $parentNode);
         } else {
             throw new ParseException("Parse error: unmatched brackets.");
         }
@@ -125,6 +128,32 @@ class Parser {
         $node->setData(eval("return " . $code. ";"));
         $node->parent = $parentNode;
         $parentNode->addChild($node);
+    }
+
+    /**
+     * Parse the comment
+     *
+     * @param string $codeStr
+     * @return string
+     */
+    protected function parseComment(string $codeStr): string {
+        $code = str_split($codeStr);
+        $commentFlag = false;
+        $rslt = "";
+        foreach ($code as $k=>$v) {
+            if ($v === '#' && @$code[$k + 1] === '|') {
+                $commentFlag = true;
+                continue;
+            } else if ($v === '#' && $code[$k - 1] === '|') {
+                $commentFlag = false;
+                continue;
+            }
+            if ($commentFlag) {
+                continue;
+            }
+            $rslt .= $v;
+        }
+        return $rslt;
     }
 
 }

@@ -5,12 +5,14 @@ require_once "vendor/autoload.php";
 $parser = new \Pisp\Parser\Parser;
 
 $code = <<<EOF
-(@print ["Hello World". "\\r\\n"] ["New Hello"])
+(print ["Hello World". "\\r\\n"] ["New Hello"] abc) #| 123 |#
 EOF;
 
 $root = $parser->parse($code);
 
 $vm = new \Pisp\VM\VM;
+
+$vm->define("abc", " 123");
 
 $vm->define("print", function ($args, $vm) {
     foreach ($args as $v) {
