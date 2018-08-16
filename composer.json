@@ -1,0 +1,16 @@
+{
+    "name": "xtlsoft/pisp",
+    "description": "A lisp-like language for php.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "Tianle Xu",
+        "email": "xtl@xtlsoft.top"
+    }],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Pisp\\": "./src/"
+        }
+    }
+}
