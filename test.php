@@ -5,7 +5,7 @@ require_once "vendor/autoload.php";
 $parser = new \Pisp\Parser\Parser;
 
 $code = <<<EOF
-(print ["Hello World". "\\r\\n"] ["New Hello"] abc) #| 123 |#
+(print [:"Hello World", 123, "bcd"] ["New Hello"] abc) #| 123 |#
 EOF;
 
 $root = $parser->parse($code);
@@ -25,3 +25,4 @@ $vm->define("print", function ($args, $vm) {
 });
 
 echo $vm->run($root);
+echo PHP_EOL;

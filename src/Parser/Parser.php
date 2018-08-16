@@ -65,7 +65,7 @@ class Parser {
         if (substr($code, 0, 1) == '(' && substr($code, -1, 1) == ')') {
             $this->doParseCalling(str_split(substr($code, 1, -1)), $parentNode);
         } else if (substr($code, 0, 1) == '[' && substr($code, -1, 1) == ']') {
-            $this->doParseLiteral(str_split(substr($code, 1, -1)), $parentNode);
+            $this->doParseLiteral(str_split(trim(substr($code, 1, -1))), $parentNode);
         } else if (str_replace([' ', ')', '(', '[', ']', ';'], ['', '', '', '', '', ''], $code) == $code) {
             $this->doParseCalling(str_split($code), $parentNode);
         } else {
@@ -124,10 +124,45 @@ class Parser {
      */
     protected function doParseLiteral(array $code, Node $parentNode) {
         $node = new LiteralNode;
-        $code = join($code, "");
-        $node->setData(eval("return " . $code. ";"));
+        $data = $this->parseLiteral($code);
+        $node->setData($data);
         $node->parent = $parentNode;
         $parentNode->addChild($node);
+    }
+
+    /**
+     * Parse a literal
+     *
+     * @param array $code
+     * @return mixed
+     */
+    public function parseLiteral(array $code) {
+        $codeStr = join($code, "");
+        if ($code[0] == '"' || $code[0] == "'") {
+            $data = substr($codeStr, 1, -1);
+        } else if (is_numeric($codeStr)) {
+            $data = $codeStr * 1;
+        } else if ($code[0] == ':') {
+            $data = [];
+            $flag1 = false;
+            $flag2 = false;
+            $curr = "";
+            foreach ($code as $k=>$v) {
+                if ($k === 0) continue;
+                if ($v === '"' && !$flag2) $flag1 = !$flag1;
+                if ($v === "'" && !$flag1) $flag2 = !$flag2;
+                if ($v === ',' && !$flag1 && !$flag2) {
+                    $data[] = $this->parseLiteral(str_split(trim($curr)));
+                    $curr = "";
+                    continue;
+                }
+                $curr .= $v;
+            }
+            $data[] = $this->parseLiteral(str_split(trim($curr)));
+        } else {
+            $data = null;
+        }
+        return $data;
     }
 
     /**
