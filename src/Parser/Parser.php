@@ -104,7 +104,6 @@ class Parser {
             }
             $splited[$curr] .= $v;
         }
-        var_dump($splited);
         $node->name = $splited[0];
         $parentNode->addChild($node);
         for ($i = 1; $i < count($splited); ++ $i) {
