@@ -42,13 +42,9 @@ class Parser {
      * @return \Pisp\Parser\AST\Root
      */
     public function parse(string $code): Root {
-
         $root = new Root;
-
         $this->doParse($code, $root);
-
         return $root;
-
     }
 
     /**
@@ -117,6 +113,13 @@ class Parser {
         }
     }
 
+    /**
+     * Do parse of literals
+     *
+     * @param array $code
+     * @param Node $parentNode
+     * @return void
+     */
     protected function doParseLiteral(array $code, Node $parentNode) {
         $node = new LiteralNode;
         $code = join($code, "");
