@@ -166,7 +166,14 @@ Pisp doesn't include any functions by default. This means, if you runs the examp
 
 #### Comments
 
-Pisp doesn't support comments now, but you can use a little trick to let it support it:
+Pisp only supports block comments starting with `#|` and ending with `|#`.
+
+```lisp
+#| This is the function comment |#
+(do_something (some_function) ["literal"]) #| ok too |#
+```
+
+You can also use a little trick to let it support it:
 
 ```php
 <?php
