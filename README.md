@@ -173,6 +173,16 @@ Pisp only supports block comments starting with `#|` and ending with `|#`.
 (do_something (some_function) ["literal"]) #| ok too |#
 ```
 
+Pisp supports nested comments.
+
+Example:
+
+```lisp
+#| comment some code
+    (print ["Hello World"]) #| This prints "Hello World" |#
+|#
+```
+
 You can also use a little trick to let it support it:
 
 ```php
