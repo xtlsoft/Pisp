@@ -5,7 +5,13 @@ require_once "vendor/autoload.php";
 $parser = new \Pisp\Parser\Parser;
 
 $code = <<<EOF
-(print [:"Hello World", 123, "bcd"] ["New Hello"] abc) #| 123 |#
+#|
+( print [:"Hello World", 123, "bcd"] ["New Hello"] abc) #| 123 |#
+|#
+(
+    print
+    [: "Hello"]
+)
 EOF;
 
 $root = $parser->parse($code);

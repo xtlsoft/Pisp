@@ -24,15 +24,44 @@ class Parser {
 
     }
 
+    protected function isBlankCharacter(string $ch): bool {
+        static $blanks = [' ', "\t", "\n", "\r", ''];
+        return in_array($ch, $blanks);
+    }
+
     /**
      * Clean the given code
      *
      * @param string $code
      * @return string
      */
-    protected function cleanCode(string $code): string {
-        $code = trim($code);
-        return preg_replace("/^\[([\s]+)/", " ", $code);
+    public function cleanCode(string $code): string {
+        $codeArr = str_split(trim($code));
+        $quote = false;
+        $flag = false;
+        $rslt = '';
+        foreach ($codeArr as $k=>$v) {
+            if ($v === '[' && (@$codeArr[$k - 1] != "\\")) $flag = true;
+            if ($v === ']' && (@$codeArr[$k - 1] != "\\")) $flag = false;
+            if ($flag) {
+                $rslt .= $v;
+                continue;
+            }
+            if ($quote) {
+                if (!$this->isBlankCharacter($v)) {
+                    $quote = false;
+                    $rslt .= $v;
+                }
+            } else {
+                if ($this->isBlankCharacter($v)) {
+                    $quote = true;
+                    $rslt .= " ";
+                } else {
+                    $rslt .= $v;
+                }
+            }
+        }
+        return $rslt;
     }
 
     /**
@@ -100,13 +129,20 @@ class Parser {
                 $stack2->pop();
             }
             if ($stack->count() <= 1) {
-                if ($v == " " && $stack->isEmpty() && $stack2->isEmpty()) {
+                if ($v === ' ' && $stack->isEmpty() && $stack2->isEmpty()) {
                     $curr ++;
                     $splited[$curr] = "";
                 }
             }
             $splited[$curr] .= $v;
         }
+        $real = [];
+        foreach ($splited as $v) {
+            if (!$this->isBlankCharacter($v)) {
+                $real[] = trim($v);
+            }
+        }
+        $splited = $real;
         $node->name = $splited[0];
         $parentNode->addChild($node);
         for ($i = 1; $i < count($splited); ++ $i) {
@@ -173,17 +209,20 @@ class Parser {
      */
     protected function parseComment(string $codeStr): string {
         $code = str_split($codeStr);
-        $commentFlag = false;
+        $commentStack = new \SplStack();
         $rslt = "";
         foreach ($code as $k=>$v) {
             if ($v === '#' && @$code[$k + 1] === '|') {
-                $commentFlag = true;
+                $commentStack->push(true);
                 continue;
             } else if ($v === '#' && $code[$k - 1] === '|') {
-                $commentFlag = false;
+                if ($commentStack->isEmpty()) {
+                    throw new \Pisp\Exceptions\ParseException("Comment brackets not matched.");
+                }
+                $commentStack->pop();
                 continue;
             }
-            if ($commentFlag) {
+            if (!$commentStack->isEmpty()) {
                 continue;
             }
             $rslt .= $v;
