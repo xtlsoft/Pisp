@@ -5,10 +5,13 @@ require_once "vendor/autoload.php";
 $parser = new \Pisp\Parser\Parser;
 
 $code = <<<EOF
-#|
-( print [:"Hello World", 123, "bcd"] ["New Hello"] abc) #| 123 |#
-|#
-(print (pow [2] [50]))
+(do
+  (print abc)
+  (@def bcd [321])
+  (print bcd)
+  (@def bcde (do (@get print)))
+  (bcde [1])
+)
 EOF;
 
 $root = $parser->parse($code);
@@ -29,6 +32,8 @@ $vm->define("print", function ($args, $vm) {
 
 $lib = new \Pisp\StdLib\Calculating();
 $lib->register($vm);
+$lib2 = new \Pisp\StdLib\Basic();
+$lib2->register($vm);
 
-echo $vm->run($root);
+$vm->run($root);
 echo PHP_EOL;

@@ -118,4 +118,14 @@ class VM {
         return $this;
     }
 
+    /**
+     * Get a function
+     * 
+     * @param string $name
+     * @return mixed
+     */
+    public function get(string $name) {
+        return $this->functions[$name];
+    }
+
 }
