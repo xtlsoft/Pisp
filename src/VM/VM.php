@@ -62,7 +62,11 @@ class VM {
             }
             return $this->doFunction($name, $args);
         } else if ($node instanceof Root) {
-            return $this->runNode($node->children[0]);
+            $r = null;
+            foreach ($node->children as $child) {
+                $r = $this->runNode($child);
+            }
+            return $r;
         } else {
             throw new \Pisp\Exceptions\UnknownNodeException("Unknown node type: {$node->type}");
         }
