@@ -10,7 +10,15 @@ $code = <<<EOF
   (@def bcd [321])
   (print bcd)
   (@def bcde (do (@get print)))
-  (bcde (+ 1 2))
+  (bcde (+ 1 2 (- (mod 120 9) 2 3 )))
+  (@def
+    repeat
+    [: "a", "b"]
+    (@block
+      (print a b a b)
+    )
+  )
+  (repeat ["abc"] ["bcd"])
 )
 EOF;
 

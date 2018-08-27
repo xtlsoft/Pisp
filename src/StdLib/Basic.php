@@ -22,7 +22,7 @@ class Basic extends LibraryBase {
     }
 
     public function define($args, \Pisp\VM\VM $vm) {
-        if (count($args) != 2) {
+        if (count($args) != 2 && count($args) != 3) {
             throw new \Pisp\Exceptions\RuntimeException("Error in define: invalid arguments");
         }
         $name = $args[0];
@@ -32,12 +32,35 @@ class Basic extends LibraryBase {
         if ($name instanceof \Pisp\Parser\AST\CallingNode) {
             $name = $name->name;
         }
-        $value = $args[1];
+        if (count($args) == 2) {
+            $value = $args[1];
+        } else {
+            $value = $args[2];
+        }
         if ($value instanceof \Pisp\Parser\AST\LiteralNode) {
             $value = $value->data;
         }
-        if ($value instanceof \Pisp\Parser\AST\CallingNode && $value->name === "do") {
+        if ($value instanceof \Pisp\Parser\AST\CallingNode) {
             $value = $vm->runNode($value);
+        }
+        if (count($args) == 3) {
+            $params = $args[1];
+            if ($params instanceof \Pisp\Parser\AST\Node) {
+                $params = $vm->runNode($params);
+            }
+            $val = $value;
+            $value = function ($arguments, \Pisp\VM\VM $vm) use ($params, $val) {
+                $now = [];
+                foreach ($params as $k=>$param) {
+                    $now[$param] = @$vm->get($param);
+                    $vm->define($param, $arguments[$k]);
+                }
+                $rslt = $vm->runNode($val);
+                foreach ($now as $k=>$v) {
+                    $vm->define($k, $v);
+                }
+                return $rslt;
+            };
         }
         $vm->define($name, $value);
         return $value;
