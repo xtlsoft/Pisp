@@ -10,7 +10,7 @@ $code = <<<EOF
   (@def bcd [321])
   (print bcd)
   (@def bcde (do (@get print)))
-  (bcde [1])
+  (bcde (+ 1 2))
 )
 EOF;
 

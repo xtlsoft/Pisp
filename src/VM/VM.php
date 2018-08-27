@@ -81,6 +81,9 @@ class VM {
      */
     public function doFunction(string $name, array $args) {
         if (!isset($this->functions[$name])) {
+            if (is_numeric($name)) {
+                return $name - 0;
+            }
             throw new \Pisp\Exceptions\NoFunctionException("Unknown function: {$name}");
             return;
         }
