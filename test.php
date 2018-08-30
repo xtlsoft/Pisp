@@ -18,7 +18,16 @@ $code = <<<EOF
       (print a b a b)
     )
   )
+  (@fn
+    print-2-string
+    [: "str1", "str2"]
+    (@@@
+      (print (str1) (str2))
+    )
+  )
   (repeat ["abc"] ["bcd"])
+  (print-2-string ["Hello"] ["World"])
+  (print Hello)
 )
 EOF;
 
@@ -38,10 +47,11 @@ $vm->define("print", function ($args, $vm) {
     }
 });
 
-$lib = new \Pisp\StdLib\Calculating();
-$lib->register($vm);
-$lib2 = new \Pisp\StdLib\Basic();
-$lib2->register($vm);
+$vm->define("__defaultResolver__", function ($name, $args, $vm) {
+    return [true, $name];
+});
+
+\Pisp\StdLib\StandardLibrary::register($vm);
 
 $vm->run($root);
 echo PHP_EOL;

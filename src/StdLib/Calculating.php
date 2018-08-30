@@ -70,3 +70,5 @@ class Calculating extends LibraryBase {
     }
 
 }
+
+StandardLibrary::add(Calculating::class);

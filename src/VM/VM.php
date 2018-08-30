@@ -27,7 +27,9 @@ class VM {
      * Constructor
      */
     public function __construct() {
-
+        $this->define("__defaultResolver__", function (string $name, array $args, \Pisp\VM\VM $vm) {
+            return [false, null];
+        });
     }
 
     /**
@@ -81,8 +83,12 @@ class VM {
      */
     public function doFunction(string $name, array $args) {
         if (!isset($this->functions[$name])) {
-            if (is_numeric($name)) {
-                return $name - 0;
+            if (isset($this->functions['__defaultResolver__'])) {
+                $resolver = $this->functions['__defaultResolver__'];
+                $r = $resolver($name, $args, $this);
+                if ($r[0]) {
+                    return $r[1];
+                }
             }
             throw new \Pisp\Exceptions\NoFunctionException("Unknown function: {$name}");
             return;

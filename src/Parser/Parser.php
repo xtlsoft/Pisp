@@ -24,6 +24,12 @@ class Parser {
 
     }
 
+    /**
+     * Check is Blank character
+     *
+     * @param string $ch
+     * @return bool
+     */
     protected function isBlankCharacter(string $ch): bool {
         static $blanks = [' ', "\t", "\n", "\r", ''];
         return in_array($ch, $blanks);
@@ -97,6 +103,8 @@ class Parser {
             $this->doParseLiteral(str_split(trim(substr($code, 1, -1))), $parentNode);
         } else if (str_replace([' ', ')', '(', '[', ']', ';'], ['', '', '', '', '', ''], $code) == $code) {
             $this->doParseCalling(str_split($code), $parentNode);
+        } else if (is_numeric($code)) {
+            $this->doParseLiteral($code, $parentNode);
         } else {
             throw new ParseException("Parse error: unmatched brackets.");
         }

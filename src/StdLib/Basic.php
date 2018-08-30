@@ -95,3 +95,5 @@ class Basic extends LibraryBase {
     }
 
 }
+
+StandardLibrary::add(Basic::class);
