@@ -46,3 +46,4 @@ class StandardLibrary {
 // Load libraries
 (new Calculating);
 (new Basic);
+(new StringLib);

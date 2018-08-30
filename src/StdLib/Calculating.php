@@ -16,10 +16,10 @@ class Calculating extends LibraryBase {
      */
     public function __construct() {
 
-        $this->add("+", [$this, "plus"], true);
-        $this->add("plus", [$this, "plus"], true);
-        $this->add("-", [$this, "minus"], true);
-        $this->add("minus", [$this, "minus"], true);
+        $this->add("+", [$this, "sum"], true);
+        $this->add("sum", [$this, "sum"], true);
+        $this->add("-", [$this, "sub"], true);
+        $this->add("sub", [$this, "sub"], true);
         $this->add("*", [$this, "mul"], true);
         $this->add("mul", [$this, "mul"], true);
         $this->add("/", [$this, "div"], true);
@@ -31,11 +31,11 @@ class Calculating extends LibraryBase {
 
     }
 
-    public function plus($args, \Pisp\VM\VM $vm) {
+    public function sum($args, \Pisp\VM\VM $vm) {
         return array_sum($args);
     }
 
-    public function minus($args, \Pisp\VM\VM $vm) {
+    public function sub($args, \Pisp\VM\VM $vm) {
         $toMinus = $args[0];
         return $toMinus - array_sum(array_slice($args, 1));
     }
