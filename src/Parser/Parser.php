@@ -101,10 +101,10 @@ class Parser {
             $this->doParseCalling(str_split(substr($code, 1, -1)), $parentNode);
         } else if (substr($code, 0, 1) == '[' && substr($code, -1, 1) == ']') {
             $this->doParseLiteral(str_split(trim(substr($code, 1, -1))), $parentNode);
+        } else if (is_numeric($code)) {
+            $this->doParseLiteral(str_split($code), $parentNode);
         } else if (str_replace([' ', ')', '(', '[', ']', ';'], ['', '', '', '', '', ''], $code) == $code) {
             $this->doParseCalling(str_split($code), $parentNode);
-        } else if (is_numeric($code)) {
-            $this->doParseLiteral($code, $parentNode);
         } else {
             throw new ParseException("Parse error: unmatched brackets.");
         }
@@ -119,6 +119,7 @@ class Parser {
      * @return void
      */
     protected function doParseCalling(array $code, Node $parentNode) {
+        if (count($code) === 1 && ($code[0] === "" || $code[0] === " ")) return;
         $node = new CallingNode;
         $node->parent = $parentNode;
         $stack = new \SplStack();

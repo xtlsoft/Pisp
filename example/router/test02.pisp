@@ -1,0 +1,8 @@
+(do
+	(@def str01 ["Hello"])
+	(@def str02 ["World"])
+	(@def str03 (do (strcat str01 str02)))
+	(router
+		(GET str03 &test)
+	)
+)
