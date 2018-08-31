@@ -51,15 +51,15 @@ class StringLib extends LibraryBase {
         return strlen(implode("", $args));
     }
 
-    public function ($args, $vm) {
+    public function print($args, $vm) {
         foreach ($args as $v) {
             if (is_string($v) || method_exists($v, "__toString")) {
                 print($v);
             } else {
                 @var_export($v);
             }
-				}
-				return $args;
+	}
+	return $args;
     }
 
 }
