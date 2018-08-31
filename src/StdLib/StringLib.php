@@ -21,6 +21,7 @@ class StringLib extends LibraryBase {
         $this->add("chr", [$this, "chr"], true);
         $this->add("ord", [$this, "ord"], true);
         $this->add("strlen", [$this, "strlen"], true);
+        $this->add("print", [$this, "print"], true);
 
     }
 
@@ -48,6 +49,17 @@ class StringLib extends LibraryBase {
 
     public function strlen($args, \Pisp\VM\VM $vm) {
         return strlen(implode("", $args));
+    }
+
+    public function ($args, $vm) {
+        foreach ($args as $v) {
+            if (is_string($v) || method_exists($v, "__toString")) {
+                print($v);
+            } else {
+                @var_export($v);
+            }
+				}
+				return $args;
     }
 
 }
