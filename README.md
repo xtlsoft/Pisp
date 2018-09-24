@@ -28,7 +28,7 @@ $pisp->execute($code);
 Content of code.pisp:
 
 ```lisp
-(print ["Hello World"] ["\n"])
+(print "Hello World" "\n")
 ```
 
 Result:
@@ -131,23 +131,23 @@ Arguments are optional.
 For example:
 
 ```lisp
-(+ [1] [2])
+(+ 1 2)
 (+
- [1]
- [2]
+ 1
+ 2
 )
-( + [1] [2] )
+( + 1 2 )
 (a_function_call_without_arguments)
 ```
 
-The literals are surrounded by `[` and `]` .
+The literals are not surrounded by `[` and `]` now.
 
 For example:
 
 ```lisp
-(+ [1] [2])
-(print ["a string"])
-(+ [1.2] [1.4])
+(+ 1 2)
+(print "a string")
+(+ 1.2 1.4)
 ```
 
 Moreover, Pisp supports lazy calls.
@@ -164,6 +164,12 @@ This will outputs the var_dump result of the `\Pisp\Parser\AST\CallingNode` clas
 
 Pisp doesn't include any functions by default. This means, if you runs the examples above, you will get a `NoFunctionException`. You must define them by yourself.
 
+However, there's a useful StdLib, just:
+
+```php
+\Pisp\StdLib\StandardLibrary::register($vm);
+```
+
 #### Comments
 
 Pisp only supports block comments starting with `#|` and ending with `|#`.
@@ -179,7 +185,7 @@ Example:
 
 ```lisp
 #| comment some code
-    (print ["Hello World"]) #| This prints "Hello World" |#
+    (print "Hello World") #| This prints "Hello World" |#
 |#
 ```
 
@@ -196,7 +202,7 @@ $pisp->define("rem", function ($args, $vm) {
 Then, you can just use:
 
 ```lisp
-(@rem ["This is a comment"])
+(@rem "This is a comment")
 ```
 
 And this won't be executed.
@@ -205,7 +211,7 @@ And this won't be executed.
 
 Pisp now support many literals.
 
-Literals are surrounded by `[` and `]`.
+Literals are not surrounded by `[` and `]` now.
 
 There are currently three types of literals: numeric, string and list.
 
@@ -216,29 +222,29 @@ Numeric is an integer or float.
 Example:
 
 ```lisp
-(print [123] [123.456] [1e10] [0x3f3f3f3f])
+(print 123 123.456 1e10 0x3f3f3f3f)
 ```
 
 ##### String
 
 Strings are surrounded by quotes. Supports muiltiple quotes.
 
-`\n` or other things are not supported at the moment.
+`\n` or other things are not fully supported at the moment.
 
 Example:
 
 ```lisp
-(print ["Hello World"] ['Another 'test' Hello World'])
+(print "Hello World" 'Another \'test\' Hello World')
 ```
 
 ##### List
 
 List is a collection of values.
 
-It starts with `:`, each value is separated with a `,`.
+It is surrounded with `[` and `]`, each value is separated with a `,`.
 
 Example:
 
 ```lisp
-(print [: 1, 2, 3] [: "Hello", 234, "World", 'you'])
+(print [1, 2, [3, 4]] ["Hello", 234, "World", 'you'])
 ```

@@ -9,7 +9,7 @@
 
 namespace Pisp\Utils;
 
-class EPEL {
+class RPEL {
 
     /**
      * Check if the brackets matched
@@ -25,10 +25,12 @@ class EPEL {
         $brackets2 = array_values($brackets);
         $stack = new \SplStack();
         $skipping = false;
+        $skipping2 = false;
         $code_splited = str_split($code);
-        foreach ($code_splited as $v) {
-            if ($v == '"') $skipping = !$skipping;
-            if ($skipping) continue;
+        foreach ($code_splited as $k=>$v) {
+            if ($v == '"' && @$code_splited[$k - 1] != '\\') $skipping = !$skipping;
+            if ($v == "'" && @$code_splited[$k - 1] != '\\') $skipping2 = !$skipping2;
+            if ($skipping || $skipping2) continue;
             if (isset($brackets[$v])) {
                 $stack->push($brackets[$v]);
             }
@@ -38,7 +40,7 @@ class EPEL {
                 }
             }
         }
-        return $stack->isEmpty();
+        return ($stack->isEmpty() && (!($skipping && $skipping2)));
     }
 
     /**

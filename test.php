@@ -7,26 +7,26 @@ $parser = new \Pisp\Parser\Parser;
 $code = <<<EOF
 (do
   (print abc)
-  (@def bcd [321])
+  (@def bcd 321)
   (print bcd)
   (@def bcde (do (@get print)))
   (bcde (+ 1 2 (- (mod 120 9) 2 3 )))
   (@def
     repeat
-    [: "a", "b"]
+    ["a", "b"]
     (@block
       (print a b a b)
     )
   )
   (@fn
     print-2-string
-    [: "str1", "str2"]
+    ["str1", "str2"]
     (@@@
       (print (str1) (str2))
     )
   )
-  (repeat ["abc"] ["bcd"])
-  (print-2-string ["Hello"] ["World"])
+  (repeat "abc" "bcd")
+  (print-2-string "Hello" "World")
   (print Hello)
 )
 EOF;
