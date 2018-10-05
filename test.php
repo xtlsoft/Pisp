@@ -28,6 +28,25 @@ $code = <<<EOF
   (repeat "abc" "bcd")
   (print-2-string "Hello" "World")
   (print Hello)
+  (@if (- 1 2)
+    (print 1)
+    (print 2)
+  )
+  (@def cond 10)
+  (@while (cond)
+    (print "\nCond is " cond)
+    (@unless (- cond 5)
+      (break)
+    )
+    (@def cond (- cond 1))
+  )
+  (print "\n")
+  (@loop
+    (print "Input number 5 => ")
+    (@unless (- input 5)
+      (break)
+    )
+  )
 )
 EOF;
 
@@ -45,6 +64,10 @@ $vm->define("print", function ($args, $vm) {
             @var_export($v);
         }
     }
+});
+
+$vm->define("input", function ($args, $vm) {
+    return trim(fgets(STDIN));
 });
 
 $vm->define("__defaultResolver__", function ($name, $args, $vm) {

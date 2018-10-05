@@ -47,3 +47,4 @@ class StandardLibrary {
 (new Calculating);
 (new Basic);
 (new StringLib);
+(new FlowControl);

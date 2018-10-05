@@ -42,7 +42,7 @@ class StringLib extends LibraryBase {
 
     public function ord($args, \Pisp\VM\VM $vm) {
         if (count($args) != 1) {
-            throw new \Pisp\Exceptions\RuntimeException("Error in chr: Invalid parameter count.");
+            throw new \Pisp\Exceptions\RuntimeException("Error in ord: Invalid parameter count.");
         }
         return ord($args[0]);
     }
@@ -58,8 +58,8 @@ class StringLib extends LibraryBase {
             } else {
                 @var_export($v);
             }
-	}
-	return $args;
+	    }
+	    return $args;
     }
 
 }
