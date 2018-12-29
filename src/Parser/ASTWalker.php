@@ -33,24 +33,28 @@ class ASTWalker {
     /**
      * Walk the root
      *
+     * @param Callable $pre
+     * @param Callable $after
      * @return void
      */
-    public function __invoke(Callable $callback) {
-        $this->walk($this->ast, $callback);
+    public function __invoke(Callable $pre, Callable $after) {
+        $this->walk($this->ast, $pre, $after);
     }
 
     /**
      * Walk a node
      *
      * @param Node $ast
-     * @param Callable $callback
+     * @param Callable $pre
+     * @param Callable $after
      * @return void
      */
-    public function walk(Node $ast, Callable $callback) {
-        $callback($ast);
+    public function walk(Node $ast, Callable $pre, Callable $after) {
+        $pre($ast);
         foreach ($ast->children as $child) {
-            self::walk($child, $callback);
+            self::walk($child, $pre, $after);
         }
+        $after($ast);
     }
 
 }
