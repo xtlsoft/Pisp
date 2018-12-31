@@ -24,12 +24,35 @@ class VM {
     protected $functions = [];
 
     /**
+     * Default resolvers
+     * 
+     * @var array
+     */
+    protected $defaultResovlers = [];
+
+    /**
      * Constructor
      */
     public function __construct() {
-        $this->define("__defaultResolver__", function (string $name, array $args, \Pisp\VM\VM $vm) {
-            return [false, null];
-        });
+        $this->define("__defaultResolver__", [$this, "resolveDefault"]);
+    }
+    
+    /**
+     * Register a default resolver
+     *
+     * @param Callable $resolver
+     * @param string $prefix
+     * @return self
+     */
+    public function registerDefaultResolver(Callable $resolver, string $prefix = "NO"): self {
+        @$this->defaultResolvers[$prefix][] = $resolver;
+        return $this;
+    }
+
+    public function resolveDefault(string $name, array $args, \Pisp\VM\VM $vm) {
+        $callbacks = "";
+        $stopper = new DefaultResolver\Stopper;
+        
     }
 
     /**
