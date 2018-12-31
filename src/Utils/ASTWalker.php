@@ -7,10 +7,11 @@
  * @license MIT
  */
 
-namespace Pisp\Parser;
+namespace Pisp\Utils;
 
 use \Pisp\Parser\AST\Root;
 use \Pisp\Parser\AST\Node;
+use \Pisp\Utils\ASTWalker\WalkerInterface;
 
 class ASTWalker {
 
@@ -37,8 +38,8 @@ class ASTWalker {
      * @param Callable $after
      * @return void
      */
-    public function __invoke(Callable $pre, Callable $after) {
-        $this->walk($this->ast, $pre, $after);
+    public function __invoke(WalkerInterface $walker) {
+        $this->walk($this->ast, [$walker, "before"], [$walker, "after"]);
     }
 
     /**
